@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>param_management_ros2_integration_cpp</name>
+  <version>1.0.0</version>
+  <description>A pkg for integrating the param_management_cpp pkg with ROS 2</description>
+  <maintainer email="simon.sagmeister@tum.de">simon</maintainer>
+  <license>Apache 2.0</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <depend>rclcpp</depend>
+  <depend>param_management_cpp</depend>
+
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_cmake_gtest</test_depend>
+  <test_depend>ament_cmake_clang_format</test_depend>
+  <test_depend>ament_cmake_cpplint</test_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

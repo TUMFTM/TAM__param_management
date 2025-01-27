@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>param_management_py</name>
+  <version>1.0.0</version>
+  <description>A pkg for managing parameters without adding a ROS 2 dependency in your code.</description>
+  <maintainer email="simon.sagmeister@tum.de">Simon Sagmeister</maintainer>
+  <license>LGPLv3</license>
+
+  <author email="simon.sagmeister@tum.de">Simon Sagmeister</author>
+
+  <buildtool_depend>ament_cmake_ros</buildtool_depend>
+  <buildtool_depend>ament_cmake_python</buildtool_depend>
+  <buildtool_depend>python_cmake_module</buildtool_depend>
+
+  <depend>pybind11_vendor</depend>
+
+  <!-- Content dependencies -->
+  <depend>param_management_cpp</depend>
+
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>
