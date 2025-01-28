@@ -48,6 +48,9 @@ For a minimum example of using the logger in a ROS 2 environment, consider [this
 
 Everything should just compile using colcon. The packages `param_management_cpp` and `param_management_py` should compile without ROS 2 installed. For the other packages, having a installation of ROS 2 is required.
 
+**Disclaimer**: This package was developed using Ubuntu 22.04 and ROS 2 Humble. 
+It is expected to work also for future Ubuntu and ROS 2 releases. 
+However, if you experience problems with compilation, please open an Issue.  
 
 ## Core Developers
  - [Simon Sagmeister](https://github.com/simonsag96)
