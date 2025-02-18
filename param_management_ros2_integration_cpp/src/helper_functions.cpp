@@ -90,29 +90,47 @@ rclcpp::node_interfaces::OnSetParametersCallbackHandle::SharedPtr connect_param_
 void validate_param_overrides(int argc, char ** argv, rclcpp::Node * node)
 {
   std::vector<std::string> arguments(argv + 1, argv + argc);
-  std::string param_file{""};
   std::string node_name = node->get_fully_qualified_name();
   // Get param_file path from argv
+  std::vector<std::string> param_file_names{};
   for (std::size_t i = 0; i < arguments.size(); i++) {
     if (arguments.at(i) == "--params-file") {
-      param_file = arguments.at(i + 1);
+      param_file_names.emplace_back(arguments.at(i + 1));
     }
   }
-  if (param_file == "") {
+  if (param_file_names.empty()) {
     return;
   }
+
+  std::vector<std::string> param_file_abs_names{};
+
   // Check if absolute path and convert if relative path
-  if (param_file.rfind("/", 0) != 0) {
-    param_file = std::filesystem::current_path().string() + std::string("/") + param_file;
+  for (auto & param_file : param_file_names) {
+    if (param_file.rfind("/", 0) != 0) {
+      std::string new_param_file =
+        std::filesystem::current_path().string() + std::string("/") + param_file;
+      param_file_abs_names.push_back(new_param_file);
+    } else {
+      param_file_abs_names.push_back(param_file);
+    }
   }
   // check if Param file exists and throw
-  if (!std::filesystem::exists(param_file)) {
-    throw std::invalid_argument(
-      node_name + ": You were trying to set a non-existing parameter file: " + param_file);
+  for (auto & param_file : param_file_abs_names) {
+    if (!std::filesystem::exists(param_file)) {
+      throw std::invalid_argument(
+        node_name + ": You were trying to set a non-existing parameter file: " + param_file);
+    }
   }
 
-  // Load params from param file
-  auto param_map = rclcpp::parameter_map_from_yaml_file(param_file);
+  // Build param map from all parameter files
+  rclcpp::ParameterMap param_map{};
+  for (auto & param_file : param_file_abs_names) {
+    auto param_map_tmp = rclcpp::parameter_map_from_yaml_file(param_file);
+
+    for (auto param : param_map_tmp) {
+      param_map.insert(param);
+    }
+  }
 
   if (!param_map.count(node_name)) {  // Key not in map
     throw std::invalid_argument(
