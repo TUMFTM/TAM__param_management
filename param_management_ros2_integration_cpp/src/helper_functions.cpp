@@ -127,8 +127,8 @@ void validate_param_overrides(int argc, char ** argv, rclcpp::Node * node)
   for (auto & param_file : param_file_abs_names) {
     auto param_map_tmp = rclcpp::parameter_map_from_yaml_file(param_file);
 
-    for (auto param : param_map_tmp) {
-      param_map.insert(param);
+    for (const auto & [ns, params] : param_map_tmp) {
+      param_map[ns].insert(param_map[ns].end(), params.begin(), params.end());
     }
   }
 
