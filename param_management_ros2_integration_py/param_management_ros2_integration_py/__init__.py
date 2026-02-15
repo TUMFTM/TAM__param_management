@@ -5,4 +5,5 @@ from param_management_ros2_integration_py.helper_functions import (
 )
 from param_management_ros2_integration_py._cpp_binding import (
     init_from_yaml,
+    load_overwrites_from_yaml,
 )
