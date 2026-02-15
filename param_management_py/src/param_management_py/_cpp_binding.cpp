@@ -12,9 +12,32 @@
 #include "param_management_cpp/param_value_manager.hpp"
 
 namespace py = pybind11;
+std::unordered_map<std::string, tam::pmg::param_value_variant_t> __return_params_as_dict__(
+  tam::pmg::MgmtInterface::SharedPtr mgmt_interface)
+{
+  std::unordered_map<std::string, tam::pmg::param_value_variant_t> dict;
+#define CAST_PARAM(enum_val, typename, name)                                           \
+  if (mgmt_interface->get_type(parameter_name) == tam::pmg::ParameterType::enum_val) { \
+    dict[parameter_name] = mgmt_interface->get_value(parameter_name).as_##name();      \
+    continue;                                                                          \
+  }
+  for (const auto & parameter_name : mgmt_interface->list_parameters()) {
+    TAM_PMG_FOR_EVERY_SUPPORTED_PARAMETER_TYPE(CAST_PARAM);
+  }
+#undef CAST_PARAM
+  return dict;
+}
+void __set_params_from_dict__(
+  tam::pmg::MgmtInterface::SharedPtr mgmt_interface,
+  std::unordered_map<std::string, tam::pmg::param_value_variant_t> dict)
+{
+  for (const auto & [parameter_name, parameter_value] : dict) {
+    mgmt_interface->set_value(parameter_name, parameter_value);
+  }
+}
 PYBIND11_MODULE(_cpp_binding, m)
 {
-// clang-format off
+  // clang-format off
   #define BIND_ENUM_MEMBER(enum_val, typename, name) \
     .value(#enum_val, tam::pmg::ParameterType::enum_val)
   #define BIND_TYPE_CONVERSION_GETTER(enum_val, typename, name) \
@@ -43,7 +66,13 @@ PYBIND11_MODULE(_cpp_binding, m)
     .def("get_type", &tam::pmg::MgmtInterface::get_type)
     .def("get_description", &tam::pmg::MgmtInterface::get_description)
     .def("set_value", &tam::pmg::MgmtInterface::set_value)
-    .def("get_value", &tam::pmg::MgmtInterface::get_value);
+    .def("get_value", &tam::pmg::MgmtInterface::get_value)
+    .def(
+      "get_parameters_as_dict", &__return_params_as_dict__,
+      "Get all parameters as a dict. This is useful for example for debugging or testing purposes")
+    .def(
+      "set_parameters_from_dict", &__set_params_from_dict__,
+      "Set parameters from a dict. This is useful for example for debugging or testing purposes");
   py::class_<tam::pmg::UserInterface, tam::pmg::UserInterface::SharedPtr>(m, "UserInterface")
     .def("declare_parameter", &tam::pmg::UserInterface::declare_parameter, "Declare a parameter")
     .def("get_value", &tam::pmg::UserInterface::get_value, "Get a parameter value")
