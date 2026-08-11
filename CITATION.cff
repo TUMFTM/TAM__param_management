@@ -1,0 +1,34 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it using the metadata from this file."
+title: "Parameter Management Library of TUM Autonomous Motorsport"
+type: software
+abstract: >-
+  param_management is a library for handling the large number of parameters in autonomous
+  driving software without making the algorithm code depend on ROS 2. It provides a
+  generic, dependency-free API supporting runtime parameter updates and all data types
+  available in ROS 2, with C++ and Python bindings so that a mixed-language stack manages
+  parameters uniformly. Optional helpers synchronise the parameters with the ROS 2
+  parameter API, keeping them reachable via the ros2 param CLI at runtime while the
+  algorithms themselves stay portable and testable outside ROS 2.
+authors:
+  - family-names: "Sagmeister"
+    given-names: "Simon"
+    orcid: "https://orcid.org/0009-0002-9246-5456"
+    affiliation: "Technical University of Munich, Germany; School of Engineering and Design, Department of Mobility Systems Engineering, Institute of Automotive Technology"
+    email: "simon.sagmeister@tum.de"
+license: Apache-2.0
+keywords:
+  - "ROS 2"
+  - "robotics"
+  - "parameters"
+  - "parameter management"
+  - "configuration"
+  - "real-time systems"
+  - "autonomous driving"
+  - "autonomous racing"
+  - "C++"
+  - "Python"
+repository-code: "https://github.com/TUMFTM/TAM__param_management"
+url: "https://github.com/TUMFTM/TAM__param_management"
+version: "1.0.0"
+date-released: "2026-08-11"
